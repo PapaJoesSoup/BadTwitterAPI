@@ -10,40 +10,62 @@ namespace BadTwitterAPI
     public partial class FormUI : Form
     {
         private List<Tweet> _tweets = new List<Tweet>();
+
+        // These items could be moved to config and retrieved.
         public static string UtcFormat = "yyyy-MM-ddTHH:mm:ss.fffZ";
+        public static DateTime defaultStart = new System.DateTime(2016, 1, 1, 0, 0, 0, 0);
+        public static DateTime defaultEnd = new System.DateTime(2017, 12, 31, 23, 59, 59, 999);
 
         public FormUI()
         {
             InitializeComponent();
             lblWaiting.Visible = false;
-            btnReadFile.Enabled = _tweets.Count > 0;
+            btnReadFile.Visible = _tweets.Count > 0;
+            dtpStart.Value = defaultStart;
+            dtpEnd.Value = defaultEnd;
         }
 
         private async void btnGetTweets_Click(object sender, EventArgs e)
         {
             // display a wait message...
             Application.UseWaitCursor = true;
+
+            // Clear grid display
+            _tweets.Clear();
+            UpdateGridDisplay();
+
+            // Set display state
+            lblRecordCount.Text = $@"({_tweets.Count} Records)";
+            btnReadFile.Visible = _tweets.Count > 0;
             lblWaiting.Visible = true;
+
             // convert datetime values to UTC strings
             string startDate = dtpStart.Value.ToUniversalTime().ToString(UtcFormat);
             string endDate = dtpEnd.Value.ToUniversalTime().ToString(UtcFormat);
-            _tweets.Clear();
+
             // set a stopwatch to get retrieval time
             Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
             _tweets = await BadApiClient.GetTweets(startDate, endDate);
             watch.Stop();
             long elapsedMs = watch.ElapsedMilliseconds;
+
+            // Display record stats
             lblRecordCount.Text = $@"(Retrieved {_tweets.Count} Records in {Convert.ToDecimal(elapsedMs) / 1000} Sec)";
 
             // Update grid display
+            UpdateGridDisplay();
+
+            // update stats and show file button
+            btnReadFile.Visible = _tweets.Count > 0;
+            lblWaiting.Visible = false;
+            Application.UseWaitCursor = false;
+        }
+
+        private void UpdateGridDisplay()
+        {
             gridResults.DataSource = null;
             gridResults.DataSource = _tweets;
             gridResults.Refresh();
-            
-            // update stats and enable file button
-            btnReadFile.Enabled = _tweets.Count > 0;
-            lblWaiting.Visible = false;
-            Application.UseWaitCursor = false;
         }
 
         private void btnReadFile_Click(object sender, EventArgs e)
@@ -67,9 +89,9 @@ namespace BadTwitterAPI
             }
             catch (Exception exception)
             {
-                Console.WriteLine(exception);
                 Cursor.Current = DefaultCursor;
-                throw;
+                MessageBox.Show(exception.ToString(), "Application Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             Application.UseWaitCursor = false;
         }

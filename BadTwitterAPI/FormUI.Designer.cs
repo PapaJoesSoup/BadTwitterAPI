@@ -85,7 +85,7 @@
             this.dtpStart.Name = "dtpStart";
             this.dtpStart.Size = new System.Drawing.Size(200, 20);
             this.dtpStart.TabIndex = 3;
-            this.dtpStart.Value = new System.DateTime(2015, 1, 1, 0, 0, 0, 0);
+            this.dtpStart.Value = new System.DateTime(2016, 1, 1, 0, 0, 0, 0);
             // 
             // dtpEnd
             // 
@@ -95,7 +95,7 @@
             this.dtpEnd.Name = "dtpEnd";
             this.dtpEnd.Size = new System.Drawing.Size(200, 20);
             this.dtpEnd.TabIndex = 4;
-            this.dtpEnd.Value = new System.DateTime(2016, 12, 31, 23, 59, 0, 0);
+            this.dtpEnd.Value = new System.DateTime(2017, 12, 31, 23, 59, 0, 0);
             // 
             // btnGetTweets
             // 
@@ -196,7 +196,7 @@
             this.lblWaiting.Text = "Retrieving Records...";
             this.lblWaiting.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // Form1
+            // FormUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -213,7 +213,7 @@
             this.Controls.Add(this.lblStart);
             this.Controls.Add(this.lblTitle);
             this.MinimumSize = new System.Drawing.Size(660, 520);
-            this.Name = "Form1";
+            this.Name = "FormUI";
             this.Text = "BadTwitterAPI Client";
             ((System.ComponentModel.ISupportInitialize)(this.gridResults)).EndInit();
             this.ResumeLayout(false);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Newtonsoft.Json;
 
 namespace BadTwitterAPI
@@ -48,11 +49,17 @@ namespace BadTwitterAPI
                         }
                         if (sDate < lDate) startDate = lDate.ToString(FormUI.UtcFormat);
                     }
+                    else
+                    {
+                        gotAllTweets = true;
+                        break;
+                    }
 
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    MessageBox.Show(e.ToString(), "Application Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 client.Dispose();
                 handler.Dispose();
